@@ -5,7 +5,10 @@ const cors = require('cors');
 const { extractVideoDataFromUrl } = require('./extractor');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ["https://mega-movie.onrender.com","http://localhost:5173"]
+}));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // to parse JSON bodies
 
