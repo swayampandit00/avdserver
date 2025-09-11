@@ -6,7 +6,7 @@ const { extractVideoDataFromUrl } = require('./extractor');
 
 const app = express();
 app.use(cors({
-  origin: ["https://mega-movie.onrender.com","http://localhost:5173"]
+  origin: ["https://clientdownloader.onrender.com","http://localhost:5173"]
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
