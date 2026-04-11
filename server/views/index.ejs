@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Downloader</title>
+</head>
+<body>
+    <h1>Video Downloader</h1>
+    
+    <% if (error) { %>
+        <div style="color: red; margin: 10px 0;">
+            <strong>Error:</strong> <%= error %>
+        </div>
+    <% } %>
+    
+    <form action="/download" method="POST">
+        <div>
+            <label for="video_url">Video URL:</label><br>
+            <input type="text" id="video_url" name="video_url" required style="width: 300px;">
+        </div>
+        <br>
+        <button type="submit">Download</button>
+    </form>
+    
+    <h2>Features</h2>
+    <ul>
+        <% features.forEach(function(feature) { %>
+            <li><strong><%= feature.title %></strong>: <%= feature.description %></li>
+        <% }); %>
+    </ul>
+    
+    <h2>FAQ</h2>
+    <ul>
+        <% faqs.forEach(function(faq) { %>
+            <li>
+                <strong><%= faq.question %></strong><br>
+                <%= faq.answer %>
+            </li>
+        <% }); %>
+    </ul>
+</body>
+</html>

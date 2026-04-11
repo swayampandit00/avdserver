@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download <%= title %></title>
+</head>
+<body>
+    <h1><%= title %></h1>
+    
+    <% if (thumbnail) { %>
+        <img src="<%= thumbnail %>" alt="<%= title %>" style="max-width: 300px;">
+    <% } %>
+    
+    <h2>Available Formats</h2>
+    <% if (formats && formats.length > 0) { %>
+        <ul>
+            <% formats.forEach(function(format) { %>
+                <li>
+                    <strong><%= format.format_name %></strong> (.<%= format.extension %>)
+                    <a href="<%= format.url %>" download>Download</a>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No formats available</p>
+    <% } %>
+    
+    <br><br>
+    <a href="/">← Back to home</a>
+</body>
+</html>
