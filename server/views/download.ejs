@@ -4,29 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download <%= title %></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .video-info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ffeaa7;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #bee5eb;
+            margin: 10px 0;
+        }
+        .format-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            border-left: 4px solid #007bff;
+        }
+        .download-btn {
+            background: #007bff;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 3px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .download-btn:hover {
+            background: #0056b3;
+        }
+        .thumbnail {
+            max-width: 300px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1><%= title %></h1>
+    <h1>Download <%= title %></h1>
     
     <% if (thumbnail) { %>
-        <img src="<%= thumbnail %>" alt="<%= title %>" style="max-width: 300px;">
+        <div class="video-info">
+            <img src="<%= thumbnail %>" alt="<%= title %>" class="thumbnail">
+        </div>
+    <% } %>
+    
+    <% if (videoId) { %>
+        <div class="video-info">
+            <strong>Video ID:</strong> <%= videoId %><br>
+            <strong>YouTube URL:</strong> <a href="https://www.youtube.com/watch?v=<%= videoId %>" target="_blank">https://www.youtube.com/watch?v=<%= videoId %></a>
+        </div>
+    <% } %>
+    
+    <% if (error) { %>
+        <div class="error">
+            <strong>Notice:</strong> <%= error %>
+        </div>
+    <% } %>
+    
+    <% if (warning) { %>
+        <div class="warning">
+            <strong>Information:</strong> <%= warning %>
+        </div>
     <% } %>
     
     <h2>Available Formats</h2>
     <% if (formats && formats.length > 0) { %>
-        <ul>
-            <% formats.forEach(function(format) { %>
-                <li>
-                    <strong><%= format.format_name %></strong> (.<%= format.extension %>)
-                    <a href="<%= format.url %>" download>Download</a>
-                </li>
-            <% }); %>
-        </ul>
+        <% formats.forEach(function(format) { %>
+            <div class="format-item">
+                <strong><%= format.format_name %></strong> (.<%= format.extension %>)
+                <a href="<%= format.url %>" download class="download-btn">Download</a>
+            </div>
+        <% }); %>
     <% } else { %>
-        <p>No formats available</p>
+        <div class="error">
+            <strong>No download formats available</strong><br>
+            This video is restricted by YouTube and download links are not available. You can still watch it on YouTube.
+            <% if (videoId) { %>
+                <br><br>
+                <a href="https://www.youtube.com/watch?v=<%= videoId %>" target="_blank" class="download-btn">Watch on YouTube</a>
+            <% } %>
+        </div>
     <% } %>
     
     <br><br>
-    <a href="/">← Back to home</a>
+    <a href="/" class="back-link"><- Back to home</a>
 </body>
 </html>
