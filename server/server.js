@@ -4,7 +4,35 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { extractVideoDataFromUrl } = require('./extractor');
 
+// Default data for rendering
+const FEATURES = [
+    {
+        title: "High Quality Downloads",
+        description: "Download videos in various qualities up to 4K"
+    },
+    {
+        title: "Multiple Formats",
+        description: "Support for MP4, WebM, and other popular formats"
+    },
+    {
+        title: "Fast Processing",
+        description: "Quick extraction and download processing"
+    }
+];
+
+const FAQS = [
+    {
+        question: "What video formats are supported?",
+        answer: "We support MP4, WebM, and other popular video formats."
+    },
+    {
+        question: "Is there a limit on video length?",
+        answer: "There is no strict limit, but longer videos may take more time to process."
+    }
+];
+
 const app = express();
+app.set('view engine', 'ejs');
 app.use(cors({
   origin: ["https://clientdownloader.onrender.com","http://localhost:5173"]
 }));
@@ -34,10 +62,10 @@ app.use((err, req, res, next) => {
 });*/
 
 
-app.post('/download', (req, res) => {
+app.post('/download', async (req, res) => {
     const videoUrl = req.body.video_url;
     try {
-        const videoData = extractVideoDataFromUrl(videoUrl);
+        const videoData = await extractVideoDataFromUrl(videoUrl);
         const title = videoData.title;
         const thumbnail = videoData.thumbnail;
         const formats = videoData.formats;
@@ -55,13 +83,13 @@ app.post('/download', (req, res) => {
 });
 
 // New API endpoint for client JSON requests
-app.post('/api/download', (req, res) => {
+app.post('/api/download', async (req, res) => {
     const videoUrl = req.body.video_url;
     if (!videoUrl) {
         return res.status(400).json({ error: 'video_url is required' });
     }
     try {
-        const videoData = extractVideoDataFromUrl(videoUrl);
+        const videoData = await extractVideoDataFromUrl(videoUrl);
         res.json(videoData);
     } catch (e) {
         res.status(500).json({ error: e.message });
