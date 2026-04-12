@@ -66,13 +66,13 @@ app.post('/download', async (req, res) => {
     const videoUrl = req.body.video_url;
     try {
         const videoData = await extractVideoDataFromUrl(videoUrl);
-        const title = videoData.title;
-        const thumbnail = videoData.thumbnail;
-        const formats = videoData.formats;
         res.render('download', {
-            title: title,
-            thumbnail: thumbnail,
-            formats: formats,
+            title: videoData.title,
+            thumbnail: videoData.thumbnail,
+            formats: videoData.formats,
+            videoId: videoData.videoId,
+            error: videoData.error,
+            warning: videoData.warning,
             features: FEATURES,
             faqs: FAQS
         });
@@ -100,3 +100,29 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*PS C:\Users\swaya\Downloads\avdserver-main> Invoke-RestMethod -Uri http://localhost:10000/api/download -Method POST -ContentType "application/json" -Body '{"video_url":"https://www.youtube.com/watch?v=mlWV7m2uH6o&list=RD8uz4erxs8xs&index=3"}' -TimeoutSec 180
+34b
+
+title     : YouTube Video (ID: mlWV7m2uH6o)
+formats   : {}
+thumbnail : https://img.youtube.com/vi/mlWV7m2uH6o/maxresdefault.jpg
+error     : Unable to extract video data due to YouTube restrictions. Only basic information is available.
+videoId   : mlWV7m2uH6o
+*/
