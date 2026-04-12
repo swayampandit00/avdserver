@@ -102,6 +102,32 @@ async function extractVideoDataFromUrl(url) {
             '--retries', '3',
             '--no-check-certificate'
         ]),
+        // Try with different user agent and no playlist restrictions
+        () => ytDlpWrap.execPromise([
+            url,
+            '-j',
+            '--user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            '--retries', '2',
+            '--no-check-certificate',
+            '--extract-flat', 'false'
+        ]),
+        // Try with mobile user agent
+        () => ytDlpWrap.execPromise([
+            url,
+            '-j',
+            '--user-agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            '--retries', '2',
+            '--no-check-certificate'
+        ]),
+        // Try without any restrictions
+        () => ytDlpWrap.execPromise([
+            url,
+            '-j',
+            '--user-agent', 'yt-dlp',
+            '--retries', '1',
+            '--no-check-certificate',
+            '--ignore-errors'
+        ]),
         // Fallback: just get basic info without formats
         () => ytDlpWrap.execPromise([
             url,
@@ -145,8 +171,12 @@ async function extractVideoDataFromUrl(url) {
                 format.url && 
                 format.ext && 
                 format.ext !== 'none' &&
+                format.ext !== 'unknown' &&
                 !format.url.includes('.jpg') &&
-                !format.url.includes('.png')
+                !format.url.includes('.png') &&
+                !format.url.includes('.gif') &&
+                !format.url.includes('thumbnail') &&
+                (format.vcodec !== 'none' || format.acodec !== 'none')
             );
             
             const extractedFormats = validFormats.map(formatData => extractFormatData(formatData));
